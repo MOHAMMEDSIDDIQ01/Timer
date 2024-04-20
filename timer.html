@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timer</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 20px;
+        margin-top: 18%;
+    }
+    input[type="number"] {
+        width: 85px;
+        margin: 0 5px;
+        font-size: 50px;
+    }
+    button {
+        font-size: 16px;
+        padding: 10px 20px;
+        cursor: pointer;
+        margin: 0 5px;
+        margin-top: 10px;
+    }
+    button:hover {
+        background-color: #1d8bd4;
+    }
+    
+</style>
+</head>
+<body>
+
+<div>
+    <input type="number" id="hours" placeholder="00" min="0">
+    <span>:</span>
+    <input type="number" id="minutes" placeholder="00" min="0" max="59">
+    <span>:</span>
+    <input type="number" id="seconds" placeholder="00" min="0" max="59">
+</div>
+
+<div>
+    <button onclick="startTimer()">Start</button>
+    <button onclick="pauseTimer()">Pause</button>
+    <button onclick="resetTimer()">Reset</button>
+</div>
+
+<script>
+    let hoursInput = document.getElementById('hours');
+    let minutesInput = document.getElementById('minutes');
+    let secondsInput = document.getElementById('seconds');
+
+    let timer;
+    let totalSeconds = 0;
+    let isPaused = false;
+
+    function startTimer() {
+        if (!timer) {
+            totalSeconds = parseInt(hoursInput.value || 0) * 3600 + parseInt(minutesInput.value || 0) * 60 + parseInt(secondsInput.value || 0);
+            timer = setInterval(updateTimer, 1000);
+        }
+    }
+
+    function updateTimer() {
+        if (totalSeconds > 0) {
+            totalSeconds--;
+            let hours = Math.floor(totalSeconds / 3600);
+            let minutes = Math.floor((totalSeconds % 3600) / 60);
+            let seconds = totalSeconds % 60;
+
+            hoursInput.value = String(hours).padStart(2, '0');
+            minutesInput.value = String(minutes).padStart(2, '0');
+            secondsInput.value = String(seconds).padStart(2, '0');
+        } else {
+            clearInterval(timer);
+            timer = null;
+            alert('Timer finished!');
+        }
+    }
+
+    function pauseTimer() {
+        if (timer) {
+            clearInterval(timer);
+            timer = null;
+            isPaused = true;
+        }
+    }
+
+    function resetTimer() {
+        clearInterval(timer);
+        timer = null;
+        hoursInput.value = '';
+        minutesInput.value = '';
+        secondsInput.value = '';
+        totalSeconds = 0;
+        isPaused = false;
+    }
+</script>
+
+</body>
+</html>
